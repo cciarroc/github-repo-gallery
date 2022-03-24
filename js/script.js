@@ -8,6 +8,10 @@ const repoList = document.querySelector(".repo-list");
 const repoSection = document.querySelector(".repos");
 // section class repo data
 const repoDataSection = document.querySelector(".repo-data");
+// back button
+const backButton = document.querySelector("button");
+// input with search by name placeholder
+const filterInput = document.querySelector("input");
 
 
 
@@ -18,6 +22,7 @@ const getGithubData = async function(){
 }
 
 getGithubData();
+filterInput.classList.remove("hide");
 
 function displayUserInfo(data){
     const userDiv = document.createElement("div");
@@ -78,6 +83,7 @@ function displayRepoInfo(repoInfo, languages){
     repoDataSection.innerHTML = "";
     repoDataSection.classList.remove("hide");
     repoSection.classList.add("hide");
+    backButton.classList.remove("hide");
     const repoDiv = document.createElement("div");
     repoDiv.innerHTML = `
         <h3>Name: ${repoInfo.name} </h3>
@@ -87,3 +93,23 @@ function displayRepoInfo(repoInfo, languages){
         <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on Github!</a>`;
     repoDataSection.append(repoDiv);
 }
+
+backButton.addEventListener("click", function(){
+    repoSection.classList.remove("hide");
+    repoDataSection.classList.add("hide");
+});
+
+
+filterInput.addEventListener("input", function(e){
+    const search = e.target.value
+    const allRepos = document.querySelectorAll(".repo");
+    const lowercaseSearch = search.toLowerCase();
+    for (let repo of allRepos){
+        const lowercaseRepo = repo.innerText.toLowerCase();
+        if (lowercaseRepo.includes(lowercaseSearch)){
+            repo.classList.remove("hide");
+        } else{
+            repo.classList.add("hide");
+        }
+    }
+})
